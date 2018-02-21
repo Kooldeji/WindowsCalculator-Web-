@@ -1,0 +1,173 @@
+<html>
+<head> 
+	<meta charset="UTF-8">	
+	<title>MY scientific Calculator</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body onkeydown="on_keydown(event)">
+	<div class="calculator">
+		<div class="title">
+			<p><b>SCIENTIFIC</b> Calculator</p>
+		</div>
+		<div class="screen">
+			<h1 style="height:30%;" id="sub_screen_label"> </h1>
+			<h1 style="height:70%;" id="screen_label">0</h1>
+		</div>
+
+		<div class="scipad">
+		<ul class="scirow">
+			<li id="sq">
+				<p>x<sup>2</sup></p>
+			</li>
+
+			<li id="pow">
+				<p>x<sup>y</sup></p>
+			</li>
+
+			<li id="sin">
+				<p>sin</p>
+			</li>
+
+			<li id="cos">
+				<p>cos</p>
+			</li>
+
+			<li id="tan">
+				<p>tan</p>
+			</li>
+		</ul>
+		<ul class="scirow">
+			<li id="sqrt">
+				<p>&Sqrt;</p>
+			</li>
+
+			<li id="pow10x">
+				<p>10<sup>x</sup></p>
+			</li>
+
+			<li id="log">
+				<p>log</p>
+			</li>
+
+			<li id="exp">
+				<p>Exp</p>
+			</li>
+
+			<li id="mod">
+				<p>Mod</p>
+			</li>
+		</ul>
+		</div>
+
+		<div class="keypad">
+		<ul class="keyrow">
+			<li>
+				<p>&uarr;</p>
+			</li>
+
+			<li id="CE">
+				<p>CE</p>
+			</li>
+
+			<li id="clear">
+				<p>C</p>
+			</li>
+
+			<li id="bckspace">
+				<p>&otimes;</p>
+			</li>
+
+			<li id="divide">
+				<p>&divide;</p>
+			</li>
+		</ul>
+
+		<ul class="keyrow">
+			<li id="pi">
+				<p>&pi;</p>
+			</li>
+
+			<li class="num">
+				<p>7</p>
+			</li>
+
+			<li class="num">
+				<p >8</p>
+			</li>
+
+			<li class="num">
+				<p >9</p>
+			</li>
+
+			<li id="times">
+				<p >&times;</p>
+			</li>
+		</ul>
+		<ul class="keyrow">
+			<li id="faq">
+				<p>n!</p>
+			</li>
+
+			<li class="num">
+				<p >4</p>
+			</li>
+
+			<li class="num">
+				<p>5</p>
+			</li>
+
+			<li class="num">
+				<p>6</p>
+			</li>
+
+			<li id="minus">
+				<p>&minus;</p>
+			</li>
+		</ul>
+		<ul class="keyrow">
+			<li id="neg">
+				<p>&#8723;</p>
+			</li>
+
+			<li class="num">
+				<p>1</p>
+			</li>
+
+			<li class="num">
+				<p>2</p>
+			</li>
+
+			<li class="num">
+				<p>3</p>
+			</li>
+
+			<li id="plus">
+				<p>&plus;</p>
+			</li>
+		</ul>
+		<ul class="keyrow">
+			<li id="lparan">
+				<p>(</p>
+			</li>
+
+			<li id="rparan">
+				<p>)</p>
+			</li>
+
+			<li class="num">
+				<p>0</p>
+			</li>
+
+			<li id="dot">
+				<p>.</p>
+			</li>
+
+			<li id="equals">
+				<p>&equals;</p>
+			</li>
+		</ul>
+		</div>
+	</div>
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
