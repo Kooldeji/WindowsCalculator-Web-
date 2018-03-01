@@ -1,6 +1,7 @@
 var scren = document.getElementById("screen_label");
 var sub_scren = document.getElementById("sub_screen_label");
 var numbers = document.getElementsByClassName("num");
+var sub_val = "";
 var temp = "0";
 var temp_sub = "";
 var stack = [];
@@ -8,14 +9,13 @@ var funcs = [add, sub, times, div, mod, pow, sq, sqrt, neg, pow10x, log, exp, fa
 var pre = [1, 1, 2, 2, 2, 3];
 
 //Integer that defines the position that unary funcs start from...
-var arity = 6;
-
+var unary = 6;
+document.innerHTML = "";
 //Add Events to numbers
 for (var i = numbers.length - 1; i >= 0; i--) {
 	var numBtn = numbers[i];
 	add_num_event(numBtn);
 }
-
 
 //Other Btns
 var dotBtn = document.getElementById("dot");
@@ -122,7 +122,7 @@ function add_num_event(numBtn){
 
 function get_arity(func){
 	var pos = funcs.indexOf(func);
-	if (pos >= arity){
+	if (pos >= unary){
 		return 1;
 	}
 	return 2;
@@ -137,46 +137,46 @@ function push(func){
 			var op = stack.pop();
 			solu = func(op);
 			clear_temp();
-			set_temp(solu);
+			add_temp(solu);
 			temp_sub = get_string(func, temp_sub.length>0?temp_sub:op);
+			display_sub(temp_sub);
 		}else{
 			solu = func(Number(temp));
+			var op2 = temp;
 			clear_temp();
-			set_temp(solu);
-			temp_sub = get_string(func, temp_sub.length>0?temp_sub:temp);
+			add_temp(solu);
+			temp_sub = get_string(func, temp_sub.length>0?temp_sub:op2);
+			display_sub(temp_sub);
 		}
 	}else{
 		var solu;
 		if (stack.length >1){
-			var newfunc = stack[stack.length-1];
-			if (typeof(newfunc) == "number"){
-				temp = stack.pop();
-				newfunc = stack[stack.length-1];
-			}
-			var newpos = funcs.indexOf(newfunc);
-			if (pre[pos]<=pre[newpos]){
-				var op = stack.pop();
-				var op1 = stack.pop();
-				var op2 = Number(temp);
-				solu = op(op1, op2);
-				clear_temp();
-				display(solu);
-				stack.push(solu);
-				if (stack.length>1) {
-					push(func);
-				}else{
-					add_sub(get_string(func, temp_sub.length>0?temp_sub:op2));
-					stack.push(func);
+			add_sub(get_string(func, temp_sub.length>0?temp_sub:temp));
+			while (stack.length>1){
+				var newfunc = stack[stack.length-1];
+				if (typeof(newfunc) == "number"){
+					temp = stack.pop();
+					newfunc = stack[stack.length-1];
 				}
-
-			}else{
-				var op2 = Number(temp);
-				stack.push(op2);
-				stack.push(func);
-				add_sub(get_string(func, temp_sub.length>0?temp_sub:temp));
-				clear_temp();
-				display(op2);
+					var newpos = funcs.indexOf(newfunc);
+				if (pre[pos]<=pre[newpos]){
+					var op = stack.pop();
+					var op1 = stack.pop();
+					var op2 = Number(temp);
+					solu = op(op1, op2);
+					clear_temp();
+					display(solu);
+					stack.push(solu);
+				}else{
+					var op2 = Number(temp);
+					stack.push(op2);
+					// stack.push(func);
+					clear_temp();
+					display(op2);
+					break;
+				}
 			}
+			stack.push(func);
 		}
 		else if(stack.length > 0){
 			var op2 = stack[stack.length-1];
@@ -192,7 +192,6 @@ function push(func){
 			clear_temp();
 			display(op2);
 		}
-		
 	}
 	return false;
 }
@@ -246,6 +245,12 @@ function on_keydown(event){
 		if (shiftKey){
 			on_mod();
 		}
+	}else if(code == 83	){
+		on_sin();
+	}else if(code == 67	){
+		on_cos();
+	}else if(code == 84	){
+		on_tan();
 	}
 }
 
@@ -265,6 +270,10 @@ function on_equals(){
 	if (stack.length>0){
 		clear_temp();
 		display(stack[stack.length-1]);
+	}else{
+		var sub = Number(temp);
+		clear_temp();
+		add_temp(sub);
 	}
 	clear_sub();
 }
@@ -283,6 +292,20 @@ function get_string(func, a){
 			return a +" % ";
 		case pow:
 			return a +" ^ ";
+		case sin:
+			return "sin("+a+")";
+		case cos:
+			return "cos("+a+")";
+		case tan:
+			return "tan("+a+")";
+		case log:
+			return "log("+a+")";
+		case faq:
+			return a+"!";
+		case sqrt:
+			return "&Sqrt;("+a+")";
+		case pow10x:
+			return 10+"^("+a+")";
 		default:
 			return "";
 
@@ -290,11 +313,14 @@ function get_string(func, a){
 }
 
 function on_dot(){
-	set_temp(".");
+	add_temp(".");
 }
 function on_pi(){
 	clear_temp();
-	set_temp(Math.PI);
+	add_temp(Math.PI);
+}
+function on_exp(){
+	add_temp(".e+0");
 }
 
 function on_ce(){
@@ -339,9 +365,6 @@ function on_pow10x(){
 function on_log(){
 	push(log);
 }
-function on_exp(){
-	push(exp);
-}
 function on_faq(){
 	push(faq);
 }
@@ -358,14 +381,16 @@ function on_tan(){
 function on_bckspace(){
 	var newtemp = temp.slice(0, temp.length-1);
 	clear_temp();
-	set_temp(newtemp);
+	add_temp(newtemp);
 }
 
 function click_num(number){
-	set_temp(number);
+	temp_sub = "";
+	add_temp(number);
 }
 function clear_temp(){
-	set_temp("");
+	add_temp("");
+	temp_sub = "";
 }
 
 function add(a, b){
@@ -420,14 +445,18 @@ function cos(a){
 function tan(a){
 	return Math.tan(a);
 }
-function set_temp(val){
+function add_temp(val){
 	if (val == ""){
 		temp = "0";
 	}else{		
 		if (temp == "0"){
-			temp = ""+val;
+			if (!isNaN(Number(val))){
+				temp = ""+val;
+			}
 		}else{
-			temp += ""+val;
+			if (!isNaN(Number(temp+val))){
+				temp += ""+val;
+			}	
 		}
 	}
 	display(temp);
@@ -436,11 +465,15 @@ function set_temp(val){
 function display(val){
 	scren.innerHTML = val;
 }
+function display_sub(val){
+	sub_scren.innerHTML = val;
+}
 function add_sub(val){
-	console.log(val);
-	sub_scren.innerHTML += val;
+	sub_val += val;
+	sub_scren.innerHTML = sub_val;
 }
 
 function clear_sub(){
+	sub_val = "";
 	sub_scren.innerHTML = "";
 }

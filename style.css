@@ -97,7 +97,7 @@ li:hover{
 
 #equals:hover{
 	background-color: #ea4a4a;
-	box-shadow: 3px 4px 5px rgb(77, 77, 77), 0 0 10px rgb(77, 77, 77);
+	box-shadow: 0 0 10px rgb(77, 77, 77);
 }
 #equals:active{
 	background-color: #ea4a4a89;
