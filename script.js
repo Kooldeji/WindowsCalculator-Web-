@@ -21,6 +21,12 @@ for (var i = numbers.length - 1; i >= 0; i--) {
 var dotBtn = document.getElementById("dot");
 dotBtn.addEventListener("click", on_dot);
 
+var lparan = document.getElementById("lparan");
+lparan.addEventListener("click", on_lParan);
+
+var rparan = document.getElementById("rparan");
+rparan.addEventListener("click", on_rParan);
+
 var piBtn = document.getElementById("pi");
 piBtn.addEventListener("click", on_pi);
 
@@ -126,6 +132,7 @@ function get_arity(func){
 		return 1;
 	}
 	return 2;
+	
 }
 
 function push(func){
@@ -151,7 +158,7 @@ function push(func){
 	}else{
 		var solu;
 		if (stack.length >1){
-			add_sub(get_string(func, temp_sub.length>0?temp_sub:temp));
+			add_sub(get_string(func, typeof(stack[stack.length-1])=="number"?"":temp_sub.length>0?temp_sub:temp));
 			while (stack.length>1){
 				var newfunc = stack[stack.length-1];
 				if (typeof(newfunc) == "number"){
@@ -170,7 +177,6 @@ function push(func){
 				}else{
 					var op2 = Number(temp);
 					stack.push(op2);
-					// stack.push(func);
 					clear_temp();
 					display(op2);
 					break;
@@ -251,7 +257,31 @@ function on_keydown(event){
 		on_cos();
 	}else if(code == 84	){
 		on_tan();
+	}else if(code == 57	){
+		if (shiftKey){
+			on_lParan();
+		}
+	}else if(code == 48	){
+		if (shiftKey){
+			on_rParan();
+		}
 	}
+}
+
+function solveParan(){
+	peek = stack[stack.length-2];
+	while (peek != "("){
+		op1 = stack.pop();
+		op = stack.pop();
+		op2 = stack.pop();
+		solu = op(op1, op2);
+		stack.push(solu);
+		peek = stack[stack.length-2];
+	}
+	solu = stack.pop();
+	stack.pop() //Remove Open Bracket
+	stack.push(solu);
+	display(solu);
 }
 
 function on_equals(){
@@ -311,7 +341,18 @@ function get_string(func, a){
 
 	}
 }
-
+function on_lParan(){
+	add_sub("(");
+	stack.push("(");
+}
+function on_rParan(){
+	if (stack[stack.length-1] == "("){
+		add_sub(temp);
+		stack.push(Number(temp));
+	}
+	add_sub(")");
+	solveParan();
+}
 function on_dot(){
 	add_temp(".");
 }
